@@ -1,45 +1,35 @@
-// Importing module polars for my function.
+use plotters::backend::BitMapBackend;
+use plotters::prelude::*;
 use polars::prelude::*;
-use polars::frame::group_by::GroupBy;
-use polars::frame::DataFrame;
-use polars::io::prelude::*;
-use polars::lazy::prelude::*;
-use polars::series::NamedFrom;
+use std::error::Error;
 
-use std::path::Path;
+pub fn mean(column: &Series) -> Option<f64> {
+    Some(column.mean().unwrap())
+}
 
-fn main() {
-    let file_path = Path::new("iris.csv");
-    let df = CsvReader::from_path(file_path).unwrap().finish().unwrap();
+pub fn median(column: &Series) -> Option<f64> {
+    Some(column.median().unwrap())
+}
 
-    fn average(data: &DataFrame) -> Option<f64> {
-        data.mean().get(0).map(|x| *x)
-    }
+pub fn standard_deviation(column: &Series) -> Option<f64> {
+    Some(column.std().unwrap())
+}
 
-    fn med(data: &DataFrame) -> Option<f64> {
-        data.median().get(0).map(|x| *x)
-    }
+pub fn create_scatter_plot(x_data: &[f64], y_data: &[f64], output_file: &str) -> Result<(), Box<dyn Error>> {
+    let root = BitMapBackend::new(output_file, (800, 600)).into_drawing_area();
+    root.fill(&WHITE)?;
 
-    fn standard_deviation(data: &DataFrame) -> Option<f64> {
-        data.std().get(0).map(|x| *x)
-    }
+    let mut chart = ChartBuilder::on(&root)
+        .x_label_area_size(40)
+        .y_label_area_size(40)
+        .build_cartesian_2d(0f64..10f64, 0f64..10f64)?;
 
-    fn summary_stats(data: &DataFrame) -> DataFrame {
-        data.describe().transpose().expect("Error in describe")
-    }
+    chart.configure_mesh().draw()?;
+    chart.draw_series(
+        x_data.iter()
+            .zip(y_data.iter())
+            .map(|(x, y)| Circle::new((*x, *y), 5, &BLUE.mix(0.8).filled())),
+    )?;
 
-    println!("Mean of Sepal Lengths in iris.csv: {:?}", average(&df.select("sepal.length")));
-    println!("Median of Sepal Lengths in iris.csv: {:?}", med(&df.select("sepal.length")));
-    println!("Standard Deviation of Sepal Lengths in iris.csv: {:?}", standard_deviation(&df.select("sepal.length")));
-    println!("Overall summary statistics of full dataset iris.csv: {:?}", summary_stats(&df));
-
-    fn visualize_data(data: &DataFrame, title: &str, xlabel: &str, ylabel: &str) {
-        let plot = data.violin_plot("sepal.length").unwrap();
-        plot.set_title(title);
-        plot.set_xlabel(xlabel);
-        plot.set_ylabel(ylabel);
-        plot.show();
-    }
-
-    visualize_data(&df, "Iris Dataset", "Sepal Length", "Frequency");
+    Ok(())
 }

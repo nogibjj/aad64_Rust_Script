@@ -1,15 +1,13 @@
 [package]
-name = "python-to-rust"
+name = "iris_analysis"
 version = "0.1.0"
-edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+edition = "2018"
 
 [dependencies]
-clap = { version = "4.3.4", features = ["derive"] }
+polars = "0.17.0"
+plotters = "0.3"
 csv = "1.1.6"
-rand = "0.8.5"
 
 [lib]
-name = "my_crate"
+name = "iris_analysis"
 path = "src/lib.rs"
