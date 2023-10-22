@@ -1,44 +1,35 @@
-use iris_analysis::{create_scatter_plot, mean, median, standard_deviation};
-use polars::prelude::*;
-use std::error::Error;
-use std::path::Path;
-use plotters::prelude::*;
+use iris_functions::*;
+use std::error::Error as StdError;
+use std::time::Instant;
 
-fn main() -> Result<(), Box<dyn Error>> {
-    let file_path = "iris.csv";
-    let df = CsvReader::from_path(file_path)
-        .unwrap()
-        .infer_schema(None)
-        .has_header(true)
-        .finish()
-        .unwrap();
+fn main() -> Result<(), Box<dyn StdError>> {
+    // Measure start time
+    let start_time = Instant::now();
 
-    let column_name = "sepal.length";
+    let data: Vec<IrisData> = read_iris_data("iris.csv")?;
 
-    match df.column(column_name) {
-        Ok(column) => {
-            match mean(&column.f64().unwrap()) {
-                Some(mean) => println!("Mean of {}: {:.2}", column_name, mean),
-                None => eprintln!("No data to calculate mean"),
-            }
+    let sepal_lengths: Vec<f64> = data.iter().map(|entry| entry.sepal_length).collect();
 
-            match median(&column.f64().unwrap()) {
-                Some(median) => println!("Median of {}: {:.2}", column_name, median),
-                None => eprintln!("No data to calculate median"),
-            }
-
-            match standard_deviation(&column.f64().unwrap()) {
-                Some(std_dev) => println!("Standard Deviation of {}: {:.2}", column_name, std_dev),
-                None => eprintln!("No data to calculate standard deviation"),
-            }
-        },
-        Err(e) => eprintln!("Error accessing column {}: {:?}", column_name, e),
+    if let Some(mean) = average(&sepal_lengths) {
+        println!("Mean Sepal Length: {:.2}", mean);
     }
 
-    let x_data = vec![1.0, 2.0, 3.0, 4.0, 5.0];
-    let y_data = vec![2.0, 3.0, 3.5, 4.0, 4.5];
+    if let Some(median) = med(&mut sepal_lengths.clone()) {
+        println!("Median Sepal Length: {:.2}", median);
+    }
 
-    create_scatter_plot(&x_data, &y_data, "scatter_plot.png")?;
+    if let Some(std_dev) = standard_deviation(&sepal_lengths) {
+        println!("Standard Deviation Sepal Length: {:.2}", std_dev);
+    }
+
+    visualize_data(&data, |entry| entry.sepal_length, |entry| entry.sepal_width);
+
+    // Measure end time
+    let end_time = Instant::now();
+
+    // Calculate and print execution time
+    let execution_time = end_time.duration_since(start_time);
+    println!("Execution time: {:?}", execution_time);
 
     Ok(())
 }
