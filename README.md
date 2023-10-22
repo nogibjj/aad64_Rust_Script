@@ -1,6 +1,8 @@
 # aad64_Rust_Script
 Rewrite a Python script in Rust
 
+[![Clippy](https://github.com/nogibjj/aad64_Rust_Script/actions/workflows/actions.yml/badge.svg)](https://github.com/nogibjj/aad64_Rust_Script/actions/workflows/actions.yml)
+
 # Objective:
 The objective of this project is to rewrite an existing Python script for data processing in Rust, highlighting improvements in speed and resource usage. For the same, I re-wrote my [Week 2 Python Pandas Mini Project](https://github.com/nogibjj/aad64_Pandas-Script) in Rust. This was a simple project with the following functions:
 * Calculate Mean
