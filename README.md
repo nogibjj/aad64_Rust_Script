@@ -25,6 +25,13 @@ aad64_Rust_Script/
 
 ## [Python Script to Compare](https://github.com/nogibjj/aad64_Pandas-Script)
 
+# Differences at a Glance:
+| Language | Execution Time | User CPU time | System CPU time |
+|----------|----------------|---------------|----------------|
+| Python   | 1.091057 seconds | 1.021171s     | 2.026013s      |
+| Rust     | 186.601417ms    | 0.177937s     | 0.004627s      |
+
+
 ## Build Time Difference:
 As seen in the screenshots below, the build time for these two projects is drastically different. As research has also suggested, Rust is approximately twice as fast as Python, which was proven with the current project. 
 
@@ -33,6 +40,17 @@ As seen in the screenshots below, the build time for these two projects is drast
 
 ### Rust Build Time:
 <p align = "center"><img width="961" alt="Screenshot 2023-10-21 at 8 20 16 PM" src="https://github.com/nogibjj/Rust_Script/assets/143753050/866c7ec6-6db9-498b-ad77-b9bba36c3b2e"></p>
+
+## Memory Usage Difference:
+There was also a large difference in the memory usage as observed below:
+
+### Python Usage:
+<p align = "center"><img width="584" alt="Screenshot 2023-10-21 at 9 14 39 PM" src="https://github.com/nogibjj/aad64_Rust_Script/assets/143753050/6c6e454b-6375-414e-931a-4cf2bfa03145"></p>
+
+### Rust Usage:
+<p align = "center"><img width="993" alt="Screenshot 2023-10-21 at 9 14 24 PM" src="https://github.com/nogibjj/aad64_Rust_Script/assets/143753050/74a6eb6a-a5bb-4e05-aed7-47305b76696b"></p>
+
+
 
 ## Breakdown of the rest of the project:
 
@@ -52,7 +70,8 @@ This is a GitHub Actions workflow file named `Clippy`:
       - **Test**: Executes the `make test` command.
 This workflow automates the process of formatting, linting, and testing a Rust project using GitHub Actions whenever there is a push to the `main` branch or a pull request is opened.
 As seen in the badge above, the project is passing the entire CI/CD build without any errors. Below is also a screenshot of the project passing the test function written in `lib.rs`.
-<p align = 'center'><img width="837" alt="Screenshot 2023-10-11 at 4 26 29 PM" src="https://github.com/nogibjj/aad64_command_line/assets/143753050/5317cfaf-9df7-4e1d-884c-43d9f0a55e21"></p>
+<p align = 'center'><img width="992" alt="image" src="https://github.com/nogibjj/aad64_Rust_Script/assets/143753050/f3881dab-8c08-4105-8e2c-18ddeadeaeff">
+</p>
 
 ### 2. src Folder:
 1. __[lib.rs](https://github.com/nogibjj/aad64_Rust_Script/src/lib.rs)__: Has four functions as previously mentioned. These are to:
